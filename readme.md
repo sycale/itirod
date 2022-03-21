@@ -4,4 +4,4 @@ Minesweeper is single-player logic-based computer game played on rectangular boa
 
 https://www.figma.com/file/8YyG2KucuKViAzZMDMVunX/Untitled?node-id=0%3A1 - mock ups
 
-https://pastebin.com/vUSXAPGR - 5 functions
+https://pastebin.com/kYiDr3aD - 5 functions with its description (let me know if more specific description is required)
