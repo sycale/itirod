@@ -1,21 +1,33 @@
 <body class="main-page">
-  <time class="timer" >
-    <span class = "timer_text">00:00:00</span>
-  </time>
-  <section class = "win-time">
-    <span class = "win-time_text">Win times: </span>
-  </section>
   <main class="main-content">
-    <section class="choose-lvl">
-      <button id="easyLvl" class="choose-lvl_btn">easy</button>
-      <button id="mediumLvl" class="choose-lvl_btn">medium</button>
-      <button id="hardLvl" class="choose-lvl_btn">hard</button>
+    <aside class="aside">
+      <time class="aside__timer">
+        <span class="aside__timer-text">00:00:00</span>
+      </time>
+      <article class="aside__win-time">
+        <span class="aside__win-time-text">Win times: </span>
+      </article>
+    </aside>
+    <section class="game-container">
+      <section class="game-container__choose-lvl">
+        <button id="easyLvl" class="game-container__choose-lvl-btn">
+          easy
+        </button>
+        <button id="mediumLvl" class="game-container__choose-lvl-btn">
+          medium
+        </button>
+        <button id="hardLvl" class="game-container__choose-lvl-btn">
+          hard
+        </button>
+      </section>
+      <article class="game-container__flags">Left flags:</article>
+      <section class="game-container__board"></section>
     </section>
-    <section class = "flags">Left flags: </section>
-    <section class="board"></section>
-    <footer class="footer">
-      <button id="showmines" class="footer_btn">show mines</button>
-      <button id="newgame" class="footer_btn hidden">Start game</button>
-    </footer>
   </main>
+  <footer class="footer">
+    <button id="showmines" class="footer__btn">show mines</button>
+    <button id="newgame" class="footer__btn footer__btn--hidden">
+      Start game
+    </button>
+  </footer>
 </body>
