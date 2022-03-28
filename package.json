@@ -2,6 +2,9 @@
   "name": "sycale",
   "version": "1.0.0",
   "main": "index.js",
+  "engines": {
+    "node": "14.x"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "cross-env NODE_ENV=development webpack serve --config webpack.config.js"
@@ -17,6 +20,7 @@
     "cross-env": "^6.0.3",
     "css-loader": "^3.2.0",
     "cssnano": "^4.1.10",
+    "dotenv-webpack": "^2.0.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-airbnb-base": "^14.0.0",

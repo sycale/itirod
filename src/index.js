@@ -1,2 +1,2 @@
-import './css/mines.scss';
-// import './mines.js'
+import "./css/mines.scss";
+//import './mines.js'

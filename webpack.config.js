@@ -1,43 +1,45 @@
-const path = require('path');
-const HTMLWebpackPlugin = require('html-webpack-plugin');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const path = require("path");
+const HTMLWebpackPlugin = require("html-webpack-plugin");
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
+const DotenvWebpackPlugin = require("dotenv-webpack");
 
 module.exports = {
-  entry: './src/index.js',
+  entry: "./src/index.js",
   output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js',
+    path: path.resolve(__dirname, "dist"),
+    filename: "bundle.js",
   },
   module: {
     rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        use: 'babel-loader',
+        use: "babel-loader",
       },
       {
         test: /\.s[ac]ss$/i,
         use: [
           // Creates `style` nodes from JS strings
-          'style-loader',
+          "style-loader",
           // Translates CSS into CommonJS
-          'css-loader',
+          "css-loader",
           // Compiles Sass to CSS
-          'sass-loader',
+          "sass-loader",
         ],
       },
       {
         test: /\.exec\.js$/,
-        use: ['script-loader'],
+        use: ["script-loader"],
       },
     ],
   },
   plugins: [
     // will automatically inject bundle js into ./dist/index.html
     new HTMLWebpackPlugin({
-      template: './src/index.html', // source
-      filename: 'index.html', // destination
+      template: "./src/index.html", // source
+      filename: "index.html", // destination
     }),
-    new ExtractTextPlugin('style.css'),
+    new ExtractTextPlugin("style.css"),
+    new DotenvWebpackPlugin(),
   ],
 };
