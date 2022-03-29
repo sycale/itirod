@@ -149,12 +149,6 @@
     align-content: center;
     justify-content: center;
   }
-  &__choose-lvl-btn {
-    width: 200px;
-    height: 50px;
-    outline: none;
-    background-color: white;
-  }
 }
 
 @media screen and (max-width: 1150px) {
@@ -164,4 +158,30 @@
   .main-page {
     flex-direction: column;
   }
+}
+
+.labl {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+}
+
+.labl > input {
+  visibility: hidden;
+  position: absolute;
+}
+
+.labl > input + div {
+  cursor: pointer;
+  width: 200px;
+  height: 50px;
+  outline: none;
+  background-color: white;
+  border: 2px solid black;
+}
+
+.labl > input:checked + div {
+  background-color: #ffd6bb;
+  border: 1px solid #ff6600;
 }
