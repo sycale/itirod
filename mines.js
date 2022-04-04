@@ -7,40 +7,22 @@ let minutes = 0;
 let end;
 let rows;
 let columns;
-let checkpoint = true;
-let bombed = false;
+let isGameUp = true;
 
-function remove(arr, value) {
-  for (let i = 0; i < arr.length; i += 1) {
-    if (arr[i] === value) {
-      arr.splice(i, 1);
-    }
-  }
-}
-
-function getRandomInt(min, max) {
+const getRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+};
 
-function checkIfHasMines(i1, i2) {
-  if (
-    document.querySelector(`[data-order = "${i1}_${i2}"]`) !== null &&
-    parseInt(
-      document
-        .querySelector(`[data-order = "${i1}_${i2}"]`)
-        .getAttribute("data-mined"),
-      2
-    ) === 1
-  ) {
-    return true;
-  }
-  return false;
-}
-function checkIfHasMinesObject(cell) {
+const checkIfHasMinesByCoords = (i1, i2) => {
+  const cell = document.querySelector(`[data-order = "${i1}_${i2}"]`);
+  return cell !== null && checkIfHasMinesByElem(cell);
+};
+
+const checkIfHasMinesByElem = (cell) => {
   return parseInt(cell.getAttribute("data-mined"), 2) === 1;
-}
+};
 
-function revealCell(row, coll) {
+const revealCell = (row, coll) => {
   document
     .querySelector(`[data-order = '${row}_${coll}']`)
     .classList.add("cell-opened");
@@ -62,13 +44,13 @@ function revealCell(row, coll) {
         `<span class="counter">${mineCount}</span>`
       );
   }
-}
+};
 
-function createMines() {
+const createMines = () => {
   for (let i = 0; i < amountOfMines; i += 1) {
     const randomX = getRandomInt(0, rows - 1);
     const randomY = getRandomInt(0, columns - 1);
-    const status = checkIfHasMines(randomX, randomY);
+    const status = checkIfHasMinesByCoords(randomX, randomY);
     if (!status) {
       document
         .querySelector(`[data-order = "${randomX}_${randomY}"]`)
@@ -89,7 +71,7 @@ function createMines() {
       let MineCounts = 0;
       for (let i = cellRow - 1; i < cellRow + 2; i += 1) {
         for (let j = cellColl - 1; j < cellColl + 2; j += 1) {
-          if (checkIfHasMines(i, j)) {
+          if (checkIfHasMinesByCoords(i, j)) {
             MineCounts += 1;
           }
         }
@@ -100,9 +82,9 @@ function createMines() {
         .setAttribute("data-amount", MineCounts);
     }
   }
-}
+};
 
-function createField(rows_, columns_, mines_) {
+const createField = (rows_, columns_, mines_) => {
   document.querySelector("#board").innerHTML = "";
   amountOfFlags = mines_;
   rows = rows_;
@@ -124,22 +106,22 @@ function createField(rows_, columns_, mines_) {
         );
     }
   }
-  checkpoint = true;
+  isGameUp = true;
 
   createMines();
-}
+};
 
-function newGame() {
+const newGame = () => {
   document.querySelector(".game-status").innerHTML = "";
   createField(rows, columns, amountOfMines);
-  checkpoint = true;
+  isGameUp = true;
   document
     .querySelector("#newGame")
     .classList.add("game-controll__btn--hidden");
   turn();
-}
+};
 
-function userWins() {
+const userWins = () => {
   let amountOfCellsOpened = 0;
   document.querySelectorAll(".cell").forEach((cell) => {
     if (cell.classList.contains("cell-opened")) {
@@ -150,10 +132,9 @@ function userWins() {
     return true;
   }
   return false;
-}
+};
 
-function revealNeighbourCells(cellRow, cellCol) {
-  console.log(cellRow, cellCol);
+const revealNeighbourCells = (cellRow, cellCol) => {
   if (
     document.querySelector(`[data-order = '${cellRow}_${cellCol}']`) !== null
   ) {
@@ -183,9 +164,9 @@ function revealNeighbourCells(cellRow, cellCol) {
     revealNeighbourCells(cellRow, cellCol + 1);
     revealNeighbourCells(cellRow + 1, cellCol);
   }
-}
+};
 
-function gameOver() {
+const gameOver = () => {
   document
     .querySelectorAll(".bomb-pic")
     .forEach((bomb) => bomb.classList.add("shown"));
@@ -195,95 +176,55 @@ function gameOver() {
       "beforeend",
       "<div class = 'game-status'><span class = 'game-status_text'>Press New Game button to start a new game</span></div>"
     );
-  bombed = true;
+  isGameUp = false;
   document
     .querySelector("#newGame")
     .classList.remove("game-controll__btn--hidden");
-}
+};
 
-function turn() {
+const turn = () => {
   seconds = 0;
   minutes = 0;
-  bombed = false;
+  isGameUp = true;
+
   clearInterval(timerVar);
+
   timerVar = setInterval(() => {
     seconds += 1;
     if (seconds >= 60) {
       minutes += 1;
       seconds = 0;
     }
-    if (bombed) {
+    if (!isGameUp) {
       clearInterval(timerVar);
     }
     if (win) {
-      if (minutes > 10 && seconds > 10) {
-        document
-          .querySelector("#winTimes")
-          .insertAdjacentHTML(
-            "beforeend",
-            `<span class = "attemptsBox">00:${minutes}:${seconds}</span>`
-          );
-      } else if (minutes < 10 && seconds < 10) {
-        document
-          .querySelector("#winTimes")
-          .insertAdjacentHTML(
-            "beforeend",
-            `<span class = "attemptsBox">00:0${minutes}:0${seconds}</span>`
-          );
-      } else if (minutes < 10 && seconds > 10) {
-        document
-          .querySelector("#winTimes")
-          .insertAdjacentHTML(
-            "beforeend",
-            `<span class = "attemptsBox">00:0${minutes}:${seconds}</span>`
-          );
-      } else if (minutes > 10 && seconds < 10) {
-        document
-          .querySelector("#winTimes")
-          .insertAdjacentHTML(
-            "beforeend",
-            `<span class = "attemptsBox">00:${minutes}:0${seconds}</span>`
-          );
-      }
+      document
+        .querySelector("#winTimes")
+        .insertAdjacentHTML(
+          "beforeend",
+          `<span class = "attemptsBox">00:${minutes
+            .toString()
+            .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}</span>`
+        );
       win = false;
 
       seconds = 0;
       minutes = 0;
       clearInterval(timerVar);
     }
-
-    if (seconds / 10 < 1 && minutes / 10 < 1) {
-      document.querySelector(
-        "#timer"
-      ).innerHTML = `<div class = "timer" id = "storage"><span class = "timer_text">00:0${minutes}:0${seconds}</span></div> `;
-    } else if (seconds / 10 > 1 && minutes / 10 < 1) {
-      document.querySelector(
-        "#timer"
-      ).innerHTML = `<div class = "timer" ><span class = "timer_text">00:0${minutes}:${seconds}</span></div> `;
-    } else if (minutes / 10 > 1 && seconds / 10 < 1) {
-      document.querySelector(
-        "#timer"
-      ).innerHTML = `<div class = "timer"><span class = "timer_text">00:${minutes}:0${seconds}<span></div> `;
-    } else if (minutes / 10 === 1 && seconds / 10 === 1) {
-      document.querySelector(
-        "#timer"
-      ).innerHTML = `<div class = "timer"><span class = "timer_text">00:${minutes}:${seconds}</span></div> `;
-    } else if (minutes / 10 === 1 && seconds / 10 < 1) {
-      document.querySelector(
-        "#timer"
-      ).innerHTML = `<div class = "timer"><span class = "timer_text">00:${minutes}:0${seconds}</span></div> `;
-    } else if (minutes / 10 < 1 && seconds / 10 === 1) {
-      document.querySelector(
-        "#timer"
-      ).innerHTML = `<div class = "timer"><span class = "timer_text">00:0${minutes}:${seconds}</span></div> `;
-    }
+    document.querySelector(
+      "#timer"
+    ).innerHTML = `<div class = "timer" id = "storage"><span class = "timer_text">00:${minutes
+      .toString()
+      .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}</span></div> `;
   }, 1000);
+
   document.querySelectorAll(".cell").forEach((cell) =>
     cell.addEventListener("contextmenu", (e) => {
       e.preventDefault();
-      if (checkpoint) {
+      if (isGameUp) {
         if (!e.target.classList.contains("cell-opened")) {
-          console.log(e.target.parentNode);
           if (e.target.parentNode.classList.contains("flagged")) {
             e.target.parentNode.classList.remove("flagged");
             amountOfFlags += 1;
@@ -306,16 +247,15 @@ function turn() {
 
   document.querySelectorAll(".cell").forEach((cell) =>
     cell.addEventListener("click", () => {
-      console.log("here");
       end = false;
-      if (checkpoint) {
+      if (isGameUp) {
         if (
           cell.classList.contains("cell-opened") ||
           cell.classList.contains("flagged")
         ) {
           console.log("no");
-        } else if (checkIfHasMinesObject(cell)) {
-          checkpoint = false;
+        } else if (checkIfHasMinesByElem(cell)) {
+          isGameUp = false;
           cell.style.backgroundColor = "red";
           gameOver();
         } else {
@@ -348,40 +288,47 @@ function turn() {
       }
     })
   );
-}
+};
+
+const markActiveController = (controllerId) => {
+  document
+    .querySelectorAll('[id~="Lvl"')
+    .forEach((controller) => controller.classList.remove("active-field"));
+
+  document.getElementById(controllerId).classList.add("active-field");
+};
 
 document.addEventListener("DOMContentLoaded", () => {
-  console.log("here");
   document.querySelector("#easyLvl").addEventListener("click", () => {
-    console.log("here");
-    document.getElementById("mediumLvl").classList.remove("active-field");
-    document.getElementById("hardLvl").classList.remove("active-field");
-    document.getElementById("easyLvl").classList.add("active-field");
-    createField(9, 9, 80);
+    markActiveController("easyLvl");
+
+    createField(9, 9, 10);
+
     document
       .getElementById("newGame")
       .classList.add("game-controll__btn--hidden");
     turn();
   });
+
   document.getElementById("mediumLvl").addEventListener("click", () => {
+    markActiveController("mediumLvl");
+
     createField(13, 15, 40);
-    document.getElementById("easyLvl").classList.remove("active-field");
+
     document
       .getElementById("newGame")
       .classList.add("game-controll__btn--hidden");
-    document.getElementById("hardLvl").classList.remove("active-field");
-    document.getElementById("mediumLvl").classList.add("active-field");
     turn();
   });
+
   document.getElementById("hardLvl").addEventListener("click", () => {
+    markActiveController("hardLvl");
+
     createField(16, 30, 99);
 
     document
       .getElementById("newGame")
       .classList.add("game-controll__btn--hidden");
-    document.getElementById("easyLvl").classList.remove("active-field");
-    document.getElementById("mediumLvl").classList.remove("active-field");
-    document.getElementById("hardLvl").classList.add("active-field");
     turn();
   });
 
@@ -390,6 +337,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .querySelectorAll(".bomb-pic")
       .forEach((bomb) => bomb.classList.toggle("shown"));
   });
+
   document.querySelector("#newGame").addEventListener("click", () => {
     end = true;
     newGame();
