@@ -1,3 +1,5 @@
+import fetch from "node-fetch";
+
 export default class Api {
   static fetchGetRequest(path) {
     return fetch(path, {
@@ -21,6 +23,7 @@ export default class Api {
     });
   }
   static fetchPutRequest(path, body) {
+    console.log(process.env.REACT_APP_TOKEN);
     return fetch(path, {
       method: "PUT",
       headers: {
