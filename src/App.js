@@ -1,21 +1,33 @@
 import React from "react";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import { Layout } from "antd";
 
 import "./App.css";
 import Header from "./components/header";
+import CreateTest from "./components/createTest";
+import Test from "./components/test";
 
 function App() {
   return (
-    <Layout>
-      <Layout.Header>
-        <Header />
-      </Layout.Header>
+    <Router>
       <Layout>
-        <Switch></Switch>
-        <Layout.Content>Content</Layout.Content>
+        <Layout.Header>
+          <Header />
+        </Layout.Header>
+        <Layout>
+          <Layout.Content>
+            <Routes>
+              <Route path="/">
+                <Route exact path="create" element={<CreateTest />} />
+                <Route exact path=":id" element={<Test />} />
+                <Route index element={<span>Home Page</span>}></Route>
+              </Route>
+            </Routes>
+          </Layout.Content>
+        </Layout>
       </Layout>
-    </Layout>
+    </Router>
   );
 }
 
