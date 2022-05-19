@@ -1,5 +1,6 @@
-import { Button, Select } from "antd";
 import React, { useState, useEffect } from "react";
+import { Button, Input, Select } from "antd";
+import { Modal } from "antd";
 import { useParams } from "react-router-dom";
 import Api from "../api/api";
 import { JSONtoDTO } from "../mapper/mapper";
@@ -8,6 +9,8 @@ export default function Test() {
   const [test, setTest] = useState();
   const [result, setResult] = useState({});
   const [score, setScore] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(true);
+  const [userName, setUsername] = useState("");
   const { id } = useParams();
 
   useEffect(() => {
@@ -19,7 +22,7 @@ export default function Test() {
     fetchTestById(id);
   }, [id]);
 
-  const checkAnswers = () => {
+  const checkAnswers = async () => {
     let score = 0;
     Object.keys(result).forEach((key) => {
       const rightAnswer = test.questions[key].answers.filter(
@@ -31,6 +34,10 @@ export default function Test() {
       }
     });
     setScore(score);
+    Api.postResult({
+      name: userName,
+      score: (score / test.questions.length) * 10,
+    });
 
     handleCriterias(score);
   };
@@ -61,6 +68,10 @@ export default function Test() {
     }
   };
 
+  const handleOk = () => {
+    if (userName) setIsModalVisible(false);
+  };
+
   const renderQuestions = () => {
     const { questions } = test;
     return questions.map((question) => {
@@ -83,6 +94,10 @@ export default function Test() {
 
   return (
     <div className="test-container">
+      <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk}>
+        <span>Provide here ur name</span>
+        <Input onChange={(e) => setUsername(e.target.value)} />
+      </Modal>
       {test && renderQuestions()}
       <Button
         className="submit-btn"
