@@ -10,7 +10,10 @@ export default class Api {
   }
   static addTest(testBody) {
     return fetch(url + "/api/test", {
-      method: "PUT",
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify(testBody),
     });
   }

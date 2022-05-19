@@ -23,7 +23,7 @@ export default function Test() {
     let score = 0;
     Object.keys(result).forEach((key) => {
       const rightAnswer = test.questions[key].answers.filter(
-        (answer) => answer.isCorret
+        (answer) => answer.isCorrect
       )[0];
 
       if (result[key] === rightAnswer.value) {
@@ -91,7 +91,9 @@ export default function Test() {
       >
         Submit Results
       </Button>
-      {score !== null && <span className="result-score">Your score is {score}</span>}
+      {score !== null && (
+        <span className="result-score">Your score is {score}</span>
+      )}
     </div>
   );
 }

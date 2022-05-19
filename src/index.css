@@ -41,5 +41,11 @@ code {
 .result-score {
   font-size: 25px;
   margin-top: 15px;
+}
 
+.ant-form-item-control-input-content {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+  align-items: flex-start;
 }
