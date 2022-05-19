@@ -32,7 +32,7 @@ export default function Test() {
     });
     setScore(score);
 
-    handleCriterias(-1);
+    handleCriterias(score);
   };
 
   const handleCriterias = (score) => {

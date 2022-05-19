@@ -4,12 +4,12 @@ import Api from "../api/api";
 
 export default function CreateTest() {
   const [questions, setQuestions] = useState([]);
-  const [criterias, setCriterias] = useState([]);
+  const [criterias, setCriterias] = useState({});
   const [rightAnswer, setRightAnswer] = useState(null);
   const [linkToTheTest, setLinkForTheTest] = useState(null);
 
   const postTest = async () => {
-    const data = await Api.addTest({ questions });
+    const data = await Api.addTest({ questions, criterias });
 
     const json = await data.json();
 
@@ -53,25 +53,63 @@ export default function CreateTest() {
     }
   };
 
-//   const handleCriterias = (e) => {
-//     const
-//   };
+  const handleCriterias = (e) => {
+    const { moreNumber, moreAction, lessNumber, lessAction } = e;
+    const criteriasToSend = {
+      more: {
+        ...criterias.more,
+        [moreNumber]: moreAction,
+      },
+      less: {
+        ...criterias.less,
+        [lessNumber]: lessAction,
+      },
+    };
+
+    setCriterias(criteriasToSend);
+  };
 
   const renderCriterias = () => {
     return (
-      <div className="d-flex flex-row">
+      <div className="d-flex flex-column">
+        <div className="d-flex flex-column">
+          {criterias.more &&
+            Object.keys(criterias.more).map((key) => (
+              <>
+                <span>
+                  {">"} {key} - {criterias.more[key]}
+                </span>
+              </>
+            ))}
+        </div>
+        <div className="d-flex flex-column">
+          {criterias.less &&
+            Object.keys(criterias.less).map((key) => (
+              <>
+                <span>
+                  {"<"} {key} - {criterias.less[key]}
+                </span>
+              </>
+            ))}
+        </div>{" "}
         <Form onFinish={handleCriterias}>
           <div>
+            <span>More: Number</span>
             <Form.Item name="moreNumber">
               <Input />
             </Form.Item>
+            <span>Action</span>
+
             <Form.Item name="moreAction">
               <Input />
             </Form.Item>
           </div>
+          <span>Less: Number</span>
+
           <Form.Item name="lessNumber">
             <Input />
           </Form.Item>
+          <span>Action</span>
           <Form.Item name="lessAction">
             <Input />
           </Form.Item>
@@ -171,7 +209,6 @@ export default function CreateTest() {
             </Form.Item>
           </Form>
         </div>
-        <Button onClick={postTest}>Post Test</Button>
       </div>
     );
   };
@@ -191,6 +228,7 @@ export default function CreateTest() {
           </a>
         </span>
       )}
+      <Button onClick={postTest}>Post Test</Button>
     </div>
   );
 }
