@@ -1,3 +1,4 @@
+import { Card } from "antd";
 import React, { useEffect, useState } from "react";
 import Api from "../api/api";
 
@@ -14,14 +15,12 @@ export default function Results() {
     fetchResults();
   }, []);
   return (
-    <div>
+    <div className="container d-flex justify-content-center flex-column align-items-center">
       {!!results &&
         results.map((result) => (
-          <div>
-            <span>
-              {result.name} - {result.score}
-            </span>
-          </div>
+          <Card title={result.name} bordered={false} style={{ width: 300 }}>
+            <p>{result.score}</p>
+          </Card>
         ))}
     </div>
   );

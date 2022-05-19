@@ -125,9 +125,9 @@ export default function CreateTest() {
     return (
       <div className="mb-5">
         {questions.map((question) => (
-          <div className="border mb-3">
+          <div className="border mb-3 d-flex flex-column">
             <span>Your question: {question.question}</span>
-            <span>Answers</span>
+            <span>Answers: </span>
             {question.answers.map((answer) => (
               <div>
                 <span>
