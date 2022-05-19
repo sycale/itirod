@@ -1,46 +1,17 @@
-import fetch from "node-fetch";
+const host = process.env.REACT_APP_HOST || 'localhost',
+const port = process.env.REACT_APP_PORT || "8000";
+const url = `${host}:${port}`
 
-export default class Api {
-  static fetchGetRequest(path) {
-    return fetch(path, {
-      method: "GET",
-
-      headers: {
-        "Content-Type": "application/json",
-        "X-Master-Key": process.env.REACT_APP_TOKEN,
-      },
-    });
-  }
-
-  static fetchPostRequest(path, body) {
-    return fetch(path, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Master-Key": process.env.REACT_APP_TOKEN,
-      },
-      body,
-    });
-  }
-  static fetchPutRequest(path, body) {
-    console.log(process.env.REACT_APP_TOKEN);
-    return fetch(path, {
+export const storageModule = {
+  fetchGetTestById: (testId) => {
+    return fetch(url + '/api/test/' + testId, {
+      method: "GET"
+    })
+  },
+  addTest: (testBody) => {
+    return fetch(url + '/api/test', {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Master-Key": process.env.REACT_APP_TOKEN,
-      },
-      body,
-    });
+      body: JSON.stringify(testBody)
+    })
   }
-  static fetchDeleteRequest(path, body) {
-    return fetch(path, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        "X-Master-Key": process.env.REACT_APP_TOKEN,
-      },
-      body,
-    });
-  }
-}
+};
